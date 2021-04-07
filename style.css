@@ -1,0 +1,88 @@
+*:not(body) {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  height: auto;
+  margin: 1rem;
+  width: auto;
+  /* background: linear-gradient(to right bottom, #f764f7 0%, #6060f1 80%); */
+  background: #f3f3f3;
+  user-select: none;
+  --webkit-user-select: none;
+  font-family: "Inter", sans-serif;
+}
+
+button {
+  font-family: "Inter", sans-serif;
+  outline: none;
+  border: none;
+  background: transparent;
+}
+
+form {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+form * {
+  border: none;
+  outline: none;
+}
+
+form input {
+  background: #e3e3e3;
+  border-radius: 7px;
+  padding: 10px 15px 10px 15px;
+  font-size: 0.95rem;
+  font-family: "Inter", sans-serif;
+  /* margin: 0 5% 0 0; */
+  width: 85%;
+}
+
+form button {
+  background: transparent;
+  height: 100%;
+  width: auto;
+  margin: auto;
+}
+
+form button img {
+  width: 100%;
+  height: 100%;
+}
+
+#TODOs {
+  width: auto;
+  height: auto;
+  font-weight: 500;
+  margin-top: 1rem;
+}
+
+.todo {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 7px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  position: relative;
+}
+
+.todo .content {
+  padding: 10px 15px 10px 15px;
+  width: 85.5%;
+}
+
+.todo .buttons {
+  transform: tsranslateY(6%);
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+}
