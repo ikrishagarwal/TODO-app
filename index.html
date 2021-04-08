@@ -11,18 +11,18 @@
     <!-- INTER FONT -->
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap"
       rel="stylesheet"
     />
   </head>
-  <body>
+  <body class="darkmode">
     <section id="main-container">
       <form id="input-container">
         <input
           name="input"
           type="text"
           id="input"
-          placeholder="Enter Here ...."
+          placeholder="Enter Here...."
           autocomplete="off"
         />
         <button type="submit">
@@ -32,7 +32,19 @@
 
       <section id="TODOs">
         <div class="todo">
-          <p class="content">Go to school.</p>
+          <p class="content">${content}</p>
+          <div class="buttons">
+            <button class="done">
+              <img src="./assets/done.svg" alt="done" />
+            </button>
+            <button class="delete">
+              <img src="./assets/delete.svg" alt="delete" />
+            </button>
+          </div>
+        </div>
+
+        <div class="todo">
+          <p class="content">${content}</p>
           <div class="buttons">
             <button class="done">
               <img src="./assets/done.svg" alt="done" />
@@ -43,7 +55,7 @@
           </div>
         </div>
         <div class="todo">
-          <p class="content">Go to school.</p>
+          <p class="content">${content}</p>
           <div class="buttons">
             <button class="done">
               <img src="./assets/done.svg" alt="done" />
@@ -54,18 +66,7 @@
           </div>
         </div>
         <div class="todo">
-          <p class="content">Go to school.</p>
-          <div class="buttons">
-            <button class="done">
-              <img src="./assets/done.svg" alt="done" />
-            </button>
-            <button class="delete">
-              <img src="./assets/delete.svg" alt="delete" />
-            </button>
-          </div>
-        </div>
-        <div class="todo">
-          <p class="content">Go to school.</p>
+          <p class="content">${content}</p>
           <div class="buttons">
             <button class="done">
               <img src="./assets/done.svg" alt="done" />

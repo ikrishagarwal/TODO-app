@@ -4,15 +4,32 @@
   box-sizing: border-box;
 }
 
+.lightmode {
+  --home-bg-color: #f3f3f3;
+  --input-bg-color: #e3e3e3;
+  --input-font-color: black;
+  --todo-bg-color: white;
+  --todo-font-color: black;
+}
+
+.darkmode {
+  --home-bg-color: #353535;
+  --input-bg-color: #484848;
+  --input-font-color: white;
+  --todo-bg-color: #636363;
+  --todo-font-color: white;
+}
+
 body {
   height: auto;
   margin: 1rem;
   width: auto;
-  /* background: linear-gradient(to right bottom, #f764f7 0%, #6060f1 80%); */
-  background: #f3f3f3;
+  background: var(--home-bg-color);
+  color: var(--home-font-color);
   user-select: none;
   --webkit-user-select: none;
   font-family: "Inter", sans-serif;
+  position: relative;
 }
 
 button {
@@ -20,12 +37,16 @@ button {
   outline: none;
   border: none;
   background: transparent;
+  cursor: pointer;
 }
 
 form {
   width: 100%;
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 33px;
   align-items: center;
+  margin-top: 1.5rem;
+  grid-column-gap: 0.9rem;
 }
 
 form * {
@@ -34,39 +55,42 @@ form * {
 }
 
 form input {
-  background: #e3e3e3;
-  border-radius: 7px;
+  background: var(--input-bg-color);
+  color: var(--input-font-color);
+  border-radius: 13px;
   padding: 10px 15px 10px 15px;
   font-size: 0.95rem;
   font-family: "Inter", sans-serif;
-  /* margin: 0 5% 0 0; */
-  width: 85%;
+  width: auto;
+  grid-column-start: 1;
+  grid-column-end: 2;
 }
 
 form button {
   background: transparent;
   height: 100%;
-  width: auto;
-  margin: auto;
+  width: 35px;
 }
 
 form button img {
-  width: 100%;
-  height: 100%;
+  width: 120%;
+  height: 120%;
+  transform: translate(-10%, -8%);
 }
 
 #TODOs {
   width: auto;
   height: auto;
   font-weight: 500;
-  margin-top: 1rem;
+  margin-top: 1.7rem;
 }
 
 .todo {
   width: 100%;
   display: flex;
   align-items: center;
-  background: white;
+  background: var(--todo-bg-color);
+  color: var(--todo-font-color);
   border-radius: 7px;
   margin-top: 5px;
   margin-bottom: 5px;
@@ -76,13 +100,12 @@ form button img {
 .todo .content {
   padding: 10px 15px 10px 15px;
   width: 85.5%;
+  font-size: 1.15rem;
 }
 
 .todo .buttons {
-  transform: tsranslateY(6%);
   position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
+  right: 5px;
   margin: auto;
+  transform: translateY(7%);
 }
