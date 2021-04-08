@@ -10,6 +10,7 @@
   --input-font-color: black;
   --todo-bg-color: white;
   --todo-font-color: black;
+  --plus-logo-color: white;
 }
 
 .darkmode {
@@ -18,6 +19,7 @@
   --input-font-color: white;
   --todo-bg-color: #636363;
   --todo-font-color: white;
+  --plus-logo-color: #35383a;
 }
 
 body {
@@ -26,10 +28,26 @@ body {
   width: auto;
   background: var(--home-bg-color);
   color: var(--home-font-color);
-  user-select: none;
-  --webkit-user-select: none;
+  /* user-select: none;
+  --webkit-user-select: none; */
   font-family: "Inter", sans-serif;
   position: relative;
+  display: grid;
+  align-items: center;
+}
+
+::selection {
+  background: rgba(131, 206, 241, 0.767);
+}
+
+#main-container {
+  margin: auto;
+  width: 100%;
+  max-width: 700px;
+}
+
+.svg-plus-logo {
+  fill: var(--plus-logo-color);
 }
 
 button {
@@ -100,6 +118,10 @@ form button img {
   overflow: hidden;
 }
 
+.todo:hover {
+  background: #ffcf734d;
+}
+
 .todo-done {
   opacity: 50%;
 }
@@ -129,8 +151,7 @@ form button img {
 
 .todo-delete {
   transform: translateX(0%);
-  opacity: 1;
-  animation: delete 1.5s ease-out 1;
+  animation: delete 0.8s ease-in-out 1;
 }
 
 @keyframes delete {

@@ -5,7 +5,9 @@ const formSubit = (e) => {
   e.preventDefault();
 
   let input = document.querySelector("#input");
-  let content = input.value;
+  let content = input.value.trim();
+
+  if (!content) return;
 
   input.value = "";
 
@@ -44,7 +46,7 @@ const deleteTodo = (e) => {
   window.setTimeout(() => {
     const TODOs = document.querySelector("#TODOs");
     TODOs.removeChild(todo);
-  }, 1500);
+  }, 800);
 };
 
 const init = () => {
