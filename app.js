@@ -121,7 +121,9 @@ const deleteTodo = (e) => {
   }, 800);
 };
 
-const changeTheme = (e) => {
+// Disabling eslint for this because this function is called from the DOm
+/* eslint-disable no-unused-vars */
+const changeTheme = () => {
   const body = document.querySelector("body");
 
   body.classList.toggle("darkmode");
