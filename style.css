@@ -15,8 +15,6 @@
   --github-fill: black;
   --github-hover-fill: white;
   --github-bg: black;
-  --main-bolt-color: black;
-  --glitch-bolt-color: goldenrod;
   --theme-check-color: var(--header-color);
   --theme-check-hover-color: white;
   --theme-check-bg: var(--header-color);
@@ -34,8 +32,6 @@
   --github-fill: white;
   --github-hover-fill: #000000;
   --github-bg: white;
-  --glitch-bolt-color: black;
-  --main-bolt-color: goldenrod;
   --theme-check-bg: white;
   --theme-check-hover-color: var(--header-color);
   --theme-check-color: white;
