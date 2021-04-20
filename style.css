@@ -15,8 +15,6 @@
   --github-fill: black;
   --github-hover-fill: white;
   --github-bg: black;
-  --main-bolt-color: black;
-  --glitch-bolt-color: goldenrod;
   --theme-check-color: var(--header-color);
   --theme-check-hover-color: white;
   --theme-check-bg: var(--header-color);
@@ -34,8 +32,6 @@
   --github-fill: white;
   --github-hover-fill: #000000;
   --github-bg: white;
-  --glitch-bolt-color: black;
-  --main-bolt-color: goldenrod;
   --theme-check-bg: white;
   --theme-check-hover-color: var(--header-color);
   --theme-check-color: white;
@@ -86,17 +82,12 @@ body {
 }
 
 #head #logo-icon {
-  /* height: 1.5rem;
-  width: 1.5rem; */
-  /* transform: translateY(10%); */
-  /* fill: var(--header-color); */
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
   height: 100%;
   position: relative;
-  /* background: white; */
 }
 
 #head #logo-icon svg {
@@ -106,27 +97,7 @@ body {
   background: white;
   border-radius: 4px;
   cursor: pointer;
-  /* fill: rgba(0, 0, 0, 0.788); */
-  /* position: absolute; */
-  /* fill: var(--main-bolt-color); */
-  /* stroke: hsl(9, 44%, 51%); */
-  /* transform: rotate(180deg); */
-  /* background: rgb(211, 211, 86); */
 }
-/* 
-#head #logo-icon svg:nth-child(1) {
-  fill: var(--glitch-bolt-color);
-  fill: goldenrod;
-  left: 8px;
-  top: 13px;
-}
-
-#head #logo-icon svg:nth-child(2) {
-  fill: var(--glitch-bolt-color);
-  fill: goldenrod;
-  right: 9px;
-  bottom: 14px;
-} */
 
 #head #logo {
   padding: 1rem;
@@ -149,7 +120,6 @@ body {
 #head #github {
   width: 100%;
   height: 100%;
-  /* background: #000; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -167,7 +137,6 @@ body {
 
 #head #theme-check svg:hover {
   transition: background 0.5s ease-in, fill 0.5s ease-in;
-  /* background: rgba(255, 150, 74, 0.5); */
   background: var(--theme-check-bg);
   fill: var(--theme-check-hover-color);
 }
@@ -274,10 +243,6 @@ form button img {
   to {
     transform: translateX(0);
   }
-}
-
-.todo:hover {
-  background: #ffcf734d;
 }
 
 .todo-done {
