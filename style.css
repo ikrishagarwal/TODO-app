@@ -90,7 +90,7 @@ body {
   position: relative;
 }
 
-#head #logo-icon svg {
+#head #logo-icon img {
   width: calc(3rem + 5px);
   height: calc(3rem + 5px);
   padding: 5px;

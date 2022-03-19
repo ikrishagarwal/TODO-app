@@ -19,22 +19,27 @@ onclick="changeTheme(event)"
 
 let todoList = [];
 
-// SAVE THE TODO TO LOCALSTORAGE
-const saveTodo = (todoList) => {
-  if (window.localStorage && todoList.length)
-    window.localStorage.setItem("todoList", JSON.stringify(todoList));
+// REGISTER THE SERVICE WORKER
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("./sw.js");
+}
+
+// SAVE THE TODO TO LOCALSTORAGE/FORAGE
+const saveTodo = async (todoList) => {
+  if (todoList.length)
+    await localforage.setItem("todoList", JSON.stringify(todoList)).catch(() => null);
 };
 
-const getTodo = () => {
+const getTodo = async () => {
   let todoList;
-  if (window.localStorage && window.localStorage.getItem("todoList")) {
-    todoList = JSON.parse(window.localStorage.getItem("todoList"));
+  if (localforage.getItem("todoList")) {
+    todoList = JSON.parse((await localforage.getItem("todoList").catch(() => [])));
   }
   return todoList || [];
 };
 
 // FORM SUBMITED AND NOW ADD IT AS A NEW TODO
-const formSubit = (e) => {
+const formSubit = async (e) => {
   try {
     e.preventDefault();
   } catch (error) {}
@@ -74,12 +79,12 @@ const formSubit = (e) => {
   }
 
   todoList.push(content);
-  saveTodo(todoList);
+  await saveTodo(todoList);
   // console.log([...new Set(todoList)]);
 };
 
 // TODO COMPLETED
-const done = (e) => {
+const done = async (e) => {
   // const todo = e.target.parentElement.parentElement.parentElement;
   const todo = e.path.find((elem) => elem.classList.contains("todo"));
   todo.classList.toggle("todo-done");
@@ -96,7 +101,7 @@ const done = (e) => {
     todoList[index] = content;
   }
 
-  saveTodo(todoList);
+  await saveTodo(todoList);
 };
 
 // DELETE TODO
@@ -110,13 +115,13 @@ const deleteTodo = (e) => {
       ? todoList.indexOf("~~~" + content)
       : todoList.indexOf(content);
 
-  window.setTimeout(() => {
+  window.setTimeout(async () => {
     const TODOs = document.querySelector("#TODOs");
     TODOs.removeChild(todo);
 
     if (index !== -1) {
       todoList.splice(index, 1);
-      saveTodo(todoList);
+      await saveTodo(todoList);
     }
   }, 800);
 };
@@ -129,11 +134,10 @@ const changeTheme = () => {
   body.classList.toggle("darkmode");
   body.classList.toggle("lightmode");
 
-  if (window.localStorage)
-    window.localStorage.setItem(
+  localforage.setItem(
       "darkmode",
       body.classList.contains("darkmode")
-    );
+    ).catch(() => null);
 
   const themeCheck = document.querySelector("#theme-check");
 
@@ -141,7 +145,7 @@ const changeTheme = () => {
   else if (body.classList.contains("lightmode")) themeCheck.innerHTML = sunSVG;
 };
 
-const init = () => {
+const init = async () => {
   // FORM FOR ADDING TODOs
   const formHolder = document.querySelector("#input-container");
   formHolder.addEventListener("submit", formSubit);
@@ -160,9 +164,8 @@ const init = () => {
 
   // CHANGING THE THEME
 
-  // A STRING BECAUSE LOCALSTORAGE RETURNS A STRING AND NOT A BOOLEAN (┬┬﹏┬┬) 😢
-  let darkMode = "false";
-  if (window.localStorage) darkMode = window.localStorage.getItem("darkmode");
+  // A STRING BECAUSE LOCALSTORAGE/FORAGE RETURNS A STRING AND NOT A BOOLEAN (┬┬﹏┬┬) 😢
+  let darkMode = (await localforage.getItem("darkmode").catch(() => undefined)) || "false";
 
   // console.log(darkMode);
 
@@ -177,7 +180,7 @@ const init = () => {
   }
 
   // TODOS ARRAY
-  let initTodo = getTodo();
+  let initTodo = await getTodo();
 
   if (!initTodo.length) {
     initTodo = [];
@@ -188,7 +191,7 @@ const init = () => {
       "Welcome to this TO-DO app",
       "Hello"
     );
-    saveTodo(initTodo);
+    await saveTodo(initTodo);
   }
 
   const input = document.querySelector("#input");
