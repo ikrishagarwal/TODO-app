@@ -85,7 +85,10 @@ const formSubit = async (e) => {
 // TODO COMPLETED
 const done = async (e) => {
 	// const todo = e.target.parentElement.parentElement.parentElement;
-	const todo = e.path.find((elem) => elem.classList.contains('todo'));
+	// const todo = e.path.find((elem) => elem.classList.contains('todo'));
+	const todo = e.composedPath().find(
+		element => element.classList.contains('todo')
+	);
 	todo.classList.toggle('todo-done');
 
 	const content = todo.querySelector('.content').textContent;
@@ -98,11 +101,15 @@ const done = async (e) => {
 	}
 
 	await saveTodo(todoList);
+	e.stopPropagation();
 };
 
 // DELETE TODO
 const deleteTodo = (e) => {
-	const todo = e.path.find((elem) => elem.classList.contains('todo'));
+	// const todo = e.path.find((elem) => elem.classList.contains('todo'));
+	const todo = e.composedPath().find(
+		element => element.classList.contains('todo')
+	);
 	todo.classList.add('todo-delete');
 	const content = todo.querySelector('.content').textContent;
 
@@ -117,6 +124,7 @@ const deleteTodo = (e) => {
 			await saveTodo(todoList);
 		}
 	}, 800);
+	e.stopPropagation();
 };
 
 // Disabling eslint for this because this function is called from the DOm
