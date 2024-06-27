@@ -88,8 +88,12 @@ const formSubmit = async (e) => {
 
 // TODO COMPLETED
 const done = async (e) => {
-  // const todo = e.target.parentElement.parentElement.parentElement;
-  const todo = e.path.find((elem) => elem.classList.contains("todo"));
+
+  /*
+   * const todo = e.target.parentElement.parentElement.parentElement;
+   * const todo = e.path.find((elem) => elem.classList.contains("todo"));
+   */
+  const todo = e.target.closest(".todo");
   todo.classList.toggle("todo-done");
 
   const content = todo.querySelector(".content").textContent;
@@ -109,7 +113,8 @@ const done = async (e) => {
 
 // DELETE TODO
 const deleteTodo = (e) => {
-  const todo = e.path.find((elem) => elem.classList.contains("todo"));
+  // const todo = e.path.find((elem) => elem.classList.contains("todo"));
+	const todo = e.target.closest(".todo");
   todo.classList.add("todo-delete");
   const content = todo.querySelector(".content").textContent;
 
