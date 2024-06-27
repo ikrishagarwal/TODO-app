@@ -83,16 +83,10 @@ const formSubmit = async (e) => {
 
   todoList.push(content);
   await saveTodo(todoList);
-  // console.log([...new Set(todoList)]);
 };
 
 // TODO COMPLETED
 const done = async (e) => {
-
-  /*
-   * const todo = e.target.parentElement.parentElement.parentElement;
-   * const todo = e.path.find((elem) => elem.classList.contains("todo"));
-   */
   const todo = e.target.closest(".todo");
   todo.classList.toggle("todo-done");
 
@@ -113,7 +107,6 @@ const done = async (e) => {
 
 // DELETE TODO
 const deleteTodo = (e) => {
-  // const todo = e.path.find((elem) => elem.classList.contains("todo"));
 	const todo = e.target.closest(".todo");
   todo.classList.add("todo-delete");
   const content = todo.querySelector(".content").textContent;
@@ -172,8 +165,6 @@ const init = async () => {
   // CHANGING THE THEME
 
   let darkMode = await localforage.getItem("darkmode").catch(() => false);
-
-  // console.log(darkMode);
 
   if (darkMode) {
     document.body.classList.remove("lightmode");
