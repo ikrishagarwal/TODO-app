@@ -1,3 +1,6 @@
+// Instantly update the service worker if available
+self.skipWaiting();
+
 const cacheName = "todo-site-v1";
 const dynamicCacheName = "todo-dynamic-v1";
 const paths = [
