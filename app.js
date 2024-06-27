@@ -1,4 +1,5 @@
-'use strict';
+/* eslint-disable no-undef */
+"use strict";
 
 const moonSVG = `<svg
 xmlns="http://www.w3.org/2000/svg" style="transform: scale(0.85);" viewBox="0 0 512 512" onclick="changeTheme(event)" fill="white">
@@ -20,44 +21,47 @@ onclick="changeTheme(event)"
 let todoList = [];
 
 // REGISTER THE SERVICE WORKER
-if ('serviceWorker' in navigator) {
-	navigator.serviceWorker.register('./sw.js');
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("./sw.js");
 }
 
-// SAVE THE TODO TO LOCALSTORAGE/FORAGE
+// SAVE THE TODO TO LOCAL STORAGE/FORAGE
 const saveTodo = async (todoList) => {
-	if (todoList.length) await localforage.setItem('todoList', JSON.stringify(todoList)).catch(() => null);
+  if (todoList.length)
+    await localforage.
+      setItem("todoList", JSON.stringify(todoList)).
+      catch(() => null);
 };
 
 const getTodo = async () => {
-	let todoList;
-	if (localforage.getItem('todoList')) {
-		todoList = JSON.parse(await localforage.getItem('todoList').catch(() => []));
-	}
-	return todoList || [];
+  let todoList;
+  if (localforage.getItem("todoList")) {
+    todoList = JSON.parse(await localforage.getItem("todoList").catch(() => []));
+  }
+  return todoList || [];
 };
 
-// FORM SUBMITED AND NOW ADD IT AS A NEW TODO
-const formSubit = async (e) => {
-	try {
-		e.preventDefault();
-	} catch (error) {}
+// FORM SUBMITTED AND NOW ADD IT AS A NEW TODO
+const formSubmit = async (e) => {
+  try {
+    e.preventDefault();
+  } catch (error) {}
 
-	let input = document.querySelector('#input');
-	let content = input.value.trim();
+  let input = document.querySelector("#input");
+  let content = input.value.trim();
 
-	if (!content) return;
+  if (!content) return;
 
-	input.value = '';
+  input.value = "";
 
-	const todo_as_set = new Set(todoList);
-	if (todo_as_set.has(content) || todo_as_set.has('~~~' + content)) return;
+  const todo_as_set = new Set(todoList);
+  if (todo_as_set.has(content) || todo_as_set.has("~~~" + content)) return;
 
-	let todo = document.createElement('div');
-	todo.classList.add('todo');
+  let todo = document.createElement("div");
+  todo.classList.add("todo");
 
-	let html = `
-  <p class="content">${content.replace('~~~', '')}</p>
+  let html = `
+  <p class="content">${content.replace("~~~", "")}</p>
   <div class="buttons">
   <button onclick="done(event)" class="done">
   <img src="./assets/done.svg" alt="done" />
@@ -68,120 +72,134 @@ const formSubit = async (e) => {
   </div>
   `;
 
-	todo.innerHTML = html;
+  todo.innerHTML = html;
 
-	let TODOs = document.querySelector('#TODOs');
-	TODOs.insertAdjacentElement('afterbegin', todo);
+  let TODOs = document.querySelector("#TODOs");
+  TODOs.insertAdjacentElement("afterbegin", todo);
 
-	if (content.startsWith('~~~')) {
-		todo.classList.toggle('todo-done');
-	}
+  if (content.startsWith("~~~")) {
+    todo.classList.toggle("todo-done");
+  }
 
-	todoList.push(content);
-	await saveTodo(todoList);
-	// console.log([...new Set(todoList)]);
+  todoList.push(content);
+  await saveTodo(todoList);
+  // console.log([...new Set(todoList)]);
 };
 
 // TODO COMPLETED
 const done = async (e) => {
-	// const todo = e.target.parentElement.parentElement.parentElement;
-	const todo = e.path.find((elem) => elem.classList.contains('todo'));
-	todo.classList.toggle('todo-done');
+  // const todo = e.target.parentElement.parentElement.parentElement;
+  const todo = e.path.find((elem) => elem.classList.contains("todo"));
+  todo.classList.toggle("todo-done");
 
-	const content = todo.querySelector('.content').textContent;
-	const index = todoList.indexOf(content) === -1 ? todoList.indexOf('~~~' + content) : todoList.indexOf(content);
+  const content = todo.querySelector(".content").textContent;
+  const index =
+    todoList.indexOf(content) === -1
+      ? todoList.indexOf("~~~" + content)
+      : todoList.indexOf(content);
 
-	if (todo.classList.contains('todo-done') && index !== -1) {
-		todoList[index] = '~~~' + content;
-	} else if (!todo.classList.contains('todo-done') && index !== -1) {
-		todoList[index] = content;
-	}
+  if (todo.classList.contains("todo-done") && index !== -1) {
+    todoList[index] = "~~~" + content;
+  } else if (!todo.classList.contains("todo-done") && index !== -1) {
+    todoList[index] = content;
+  }
 
-	await saveTodo(todoList);
+  await saveTodo(todoList);
 };
 
 // DELETE TODO
 const deleteTodo = (e) => {
-	const todo = e.path.find((elem) => elem.classList.contains('todo'));
-	todo.classList.add('todo-delete');
-	const content = todo.querySelector('.content').textContent;
+  const todo = e.path.find((elem) => elem.classList.contains("todo"));
+  todo.classList.add("todo-delete");
+  const content = todo.querySelector(".content").textContent;
 
-	const index = todoList.indexOf(content) === -1 ? todoList.indexOf('~~~' + content) : todoList.indexOf(content);
+  const index =
+    todoList.indexOf(content) === -1
+      ? todoList.indexOf("~~~" + content)
+      : todoList.indexOf(content);
 
-	window.setTimeout(async () => {
-		const TODOs = document.querySelector('#TODOs');
-		TODOs.removeChild(todo);
+  window.setTimeout(async () => {
+    const TODOs = document.querySelector("#TODOs");
+    TODOs.removeChild(todo);
 
-		if (index !== -1) {
-			todoList.splice(index, 1);
-			await saveTodo(todoList);
-		}
-	}, 800);
+    if (index !== -1) {
+      todoList.splice(index, 1);
+      await saveTodo(todoList);
+    }
+  }, 800);
 };
 
 // Disabling eslint for this because this function is called from the DOm
 /* eslint-disable no-unused-vars */
 const changeTheme = () => {
-	const body = document.querySelector('body');
+  const body = document.querySelector("body");
 
-	body.classList.toggle('darkmode');
-	body.classList.toggle('lightmode');
+  body.classList.toggle("darkmode");
+  body.classList.toggle("lightmode");
 
-	localforage.setItem('darkmode', body.classList.contains('darkmode')).catch(() => null);
+  // eslint-disable-next-line no-undef
+  localforage.
+    setItem("darkmode", body.classList.contains("darkmode")).catch(() => null);
 
-	const themeCheck = document.querySelector('#theme-check');
+  const themeCheck = document.querySelector("#theme-check");
 
-	if (body.classList.contains('darkmode')) themeCheck.innerHTML = moonSVG;
-	else if (body.classList.contains('lightmode')) themeCheck.innerHTML = sunSVG;
+  if (body.classList.contains("darkmode")) themeCheck.innerHTML = moonSVG;
+  else if (body.classList.contains("lightmode")) themeCheck.innerHTML = sunSVG;
 };
 
 const init = async () => {
-	// FORM FOR ADDING TODOs
-	const formHolder = document.querySelector('#input-container');
-	formHolder.addEventListener('submit', formSubit);
+  // FORM FOR ADDING TODOs
+  const formHolder = document.querySelector("#input-container");
+  formHolder.addEventListener("submit", formSubmit);
 
-	// ADDING EVENT TO DONE BUTTON
-	const doneBtn = document.querySelectorAll('.done');
-	doneBtn.forEach((btn) => {
-		btn.addEventListener('click', done);
-	});
+  // ADDING EVENT TO DONE BUTTON
+  const doneBtn = document.querySelectorAll(".done");
+  doneBtn.forEach((btn) => {
+    btn.addEventListener("click", done);
+  });
 
-	// ADDING EVENT TO DELETE BUTTON
-	const deleteBtn = document.querySelectorAll('.delete');
-	deleteBtn.forEach((btn) => {
-		btn.addEventListener('click', deleteTodo);
-	});
+  // ADDING EVENT TO DELETE BUTTON
+  const deleteBtn = document.querySelectorAll(".delete");
+  deleteBtn.forEach((btn) => {
+    btn.addEventListener("click", deleteTodo);
+  });
 
-	// CHANGING THE THEME
+  // CHANGING THE THEME
 
-	let darkMode = await localforage.getItem('darkmode').catch(() => false);
+  let darkMode = await localforage.getItem("darkmode").catch(() => false);
 
-	// console.log(darkMode);
+  // console.log(darkMode);
 
-	if (darkMode) {
-		document.body.classList.remove('lightmode');
-		document.body.classList.add('darkmode');
-		document.querySelector('#theme-check').innerHTML = moonSVG;
-	} else {
-		document.body.classList.add('lightmode');
-		document.body.classList.remove('darkmode');
-		document.querySelector('#theme-check').innerHTML = sunSVG;
-	}
+  if (darkMode) {
+    document.body.classList.remove("lightmode");
+    document.body.classList.add("darkmode");
+    document.querySelector("#theme-check").innerHTML = moonSVG;
+  } else {
+    document.body.classList.add("lightmode");
+    document.body.classList.remove("darkmode");
+    document.querySelector("#theme-check").innerHTML = sunSVG;
+  }
 
-	// TODOS ARRAY
-	let initTodo = await getTodo();
+  // TODOs ARRAY
+  let initTodo = await getTodo();
 
-	if (!initTodo.length) {
-		initTodo = [];
-		initTodo.push('Have fun :)', "There's also a dark mode", 'Start listing your works', 'Welcome to this TO-DO app', 'Hello');
-		await saveTodo(initTodo);
-	}
+  if (!initTodo.length) {
+    initTodo = [];
+    initTodo.push(
+      "Have fun :)",
+      "There's also a dark mode",
+      "Start listing your works",
+      "Welcome to this TO-DO app",
+      "Hello"
+    );
+    await saveTodo(initTodo);
+  }
 
-	const input = document.querySelector('#input');
-	initTodo.forEach((todo) => {
-		input.value = todo;
-		formSubit();
-	});
+  const input = document.querySelector("#input");
+  initTodo.forEach((todo) => {
+    input.value = todo;
+    formSubmit();
+  });
 };
 
-window.addEventListener('DOMContentLoaded', init);
+window.addEventListener("DOMContentLoaded", init);
