@@ -96,10 +96,6 @@ const done = async (e) => {
 
   const content = todo.querySelector(".content").textContent;
   let todoList = await getTodo();
-  // const index =
-  //   todoList.indexOf(content) === -1
-  //     ? todoList.indexOf("~~~" + content)
-  //     : todoList.indexOf(content);
 
   let index = -1;
   todoList.find((a, i) => {
@@ -124,11 +120,6 @@ const deleteTodo = async (e) => {
   todo.classList.add("todo-delete");
   const content = todo.querySelector(".content").textContent;
   const todoList = await getTodo();
-
-  // const index =
-  //   todoList.indexOf(content) === -1
-  //     ? todoList.indexOf("~~~" + content)
-  //     : todoList.indexOf(content);
 
   let index = -1;
   todoList.find((a, i) => {
@@ -211,8 +202,6 @@ const init = async () => {
   }
 
   initTodo.forEach((todo) => {
-    // input.value = todo;
-    // formSubmit();
     createTodo(todo);
   });
 };
