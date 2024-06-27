@@ -18,8 +18,6 @@ onclick="changeTheme(event)"
   ></path>
 </svg>`;
 
-let todoList = [];
-
 // REGISTER THE SERVICE WORKER
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("./sw.js");
@@ -27,16 +25,18 @@ if ("serviceWorker" in navigator) {
 
 // SAVE THE TODO TO LOCAL STORAGE/FORAGE
 const saveTodo = async (todoList) => {
-  if (todoList.length)
-    await localforage.
-      setItem("todoList", JSON.stringify(todoList)).
-      catch(() => null);
+  await localforage.
+    setItem("todoList", JSON.stringify(todoList)).
+    catch(() => null);
 };
 
 const getTodo = async () => {
   let todoList;
   if (localforage.getItem("todoList")) {
-    todoList = JSON.parse(await localforage.getItem("todoList").catch(() => []));
+    todoList = JSON.parse(await localforage.getItem("todoList").catch((e) => {
+      console.error(e);
+      return [];
+    }));
   }
   return todoList || [];
 };
@@ -49,19 +49,26 @@ const formSubmit = async (e) => {
 
   let input = document.querySelector("#input");
   let content = input.value.trim();
+  let todoList = await getTodo();
 
   if (!content) return;
 
   input.value = "";
 
-  const todo_as_set = new Set(todoList);
-  if (todo_as_set.has(content) || todo_as_set.has("~~~" + content)) return;
+  if (todoList.find(a => a.content === content)) return;
 
+  createTodo({content, completed: false});
+
+  todoList.push({ content, completed: false });
+  await saveTodo(todoList);
+};
+
+const createTodo = (item) => {
   let todo = document.createElement("div");
   todo.classList.add("todo");
 
   let html = `
-  <p class="content">${content.replace("~~~", "")}</p>
+  <p class="content">${item.content}</p>
   <div class="buttons">
   <button onclick="done(event)" class="done">
   <img src="./assets/done.svg" alt="done" />
@@ -77,13 +84,10 @@ const formSubmit = async (e) => {
   let TODOs = document.querySelector("#TODOs");
   TODOs.insertAdjacentElement("afterbegin", todo);
 
-  if (content.startsWith("~~~")) {
+  if (item.completed){
     todo.classList.toggle("todo-done");
   }
-
-  todoList.push(content);
-  await saveTodo(todoList);
-};
+}
 
 // TODO COMPLETED
 const done = async (e) => {
@@ -91,30 +95,48 @@ const done = async (e) => {
   todo.classList.toggle("todo-done");
 
   const content = todo.querySelector(".content").textContent;
-  const index =
-    todoList.indexOf(content) === -1
-      ? todoList.indexOf("~~~" + content)
-      : todoList.indexOf(content);
+  let todoList = await getTodo();
+  // const index =
+  //   todoList.indexOf(content) === -1
+  //     ? todoList.indexOf("~~~" + content)
+  //     : todoList.indexOf(content);
+
+  let index = -1;
+  todoList.find((a, i) => {
+    if (a.content === content) {
+      index = i;
+      return true;
+    }
+  });
 
   if (todo.classList.contains("todo-done") && index !== -1) {
-    todoList[index] = "~~~" + content;
+    todoList[index].completed = true; 
   } else if (!todo.classList.contains("todo-done") && index !== -1) {
-    todoList[index] = content;
+    todoList[index].completed = false;
   }
 
   await saveTodo(todoList);
 };
 
 // DELETE TODO
-const deleteTodo = (e) => {
+const deleteTodo = async (e) => {
 	const todo = e.target.closest(".todo");
   todo.classList.add("todo-delete");
   const content = todo.querySelector(".content").textContent;
+  const todoList = await getTodo();
 
-  const index =
-    todoList.indexOf(content) === -1
-      ? todoList.indexOf("~~~" + content)
-      : todoList.indexOf(content);
+  // const index =
+  //   todoList.indexOf(content) === -1
+  //     ? todoList.indexOf("~~~" + content)
+  //     : todoList.indexOf(content);
+
+  let index = -1;
+  todoList.find((a, i) => {
+    if (a.content === content) {
+      index = i;
+      return true;
+    }
+  });
 
   window.setTimeout(async () => {
     const TODOs = document.querySelector("#TODOs");
@@ -127,15 +149,13 @@ const deleteTodo = (e) => {
   }, 800);
 };
 
-// Disabling eslint for this because this function is called from the DOm
-/* eslint-disable no-unused-vars */
+// Disabling eslint for this because this function is called from the DOM
 const changeTheme = () => {
   const body = document.querySelector("body");
 
   body.classList.toggle("darkmode");
   body.classList.toggle("lightmode");
 
-  // eslint-disable-next-line no-undef
   localforage.
     setItem("darkmode", body.classList.contains("darkmode")).catch(() => null);
 
@@ -182,19 +202,18 @@ const init = async () => {
   if (!initTodo.length) {
     initTodo = [];
     initTodo.push(
-      "Have fun :)",
-      "There's also a dark mode",
-      "Start listing your works",
-      "Welcome to this TO-DO app",
-      "Hello"
+      {content: "Have fun :)", completed: false},
+      {content: "There's also a dark mode", completed: false},
+      {content: "Start listing your works", completed: false},
+      {content: "Welcome to this TO-DO app", completed: false},
     );
     await saveTodo(initTodo);
   }
 
-  const input = document.querySelector("#input");
   initTodo.forEach((todo) => {
-    input.value = todo;
-    formSubmit();
+    // input.value = todo;
+    // formSubmit();
+    createTodo(todo);
   });
 };
 
